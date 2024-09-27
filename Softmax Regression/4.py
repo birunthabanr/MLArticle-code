@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-# Load MNIST data
+# Load MNIST dataset
 mnist = fetch_openml('mnist_784', version=1)
 X, y = mnist["data"], mnist["target"].astype(np.int8)
 
@@ -17,7 +17,6 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train.astype(np.float64))
 X_test_scaled = scaler.transform(X_test.astype(np.float64))
 
-
 # Initialize list to store weight variations (L-infinity norm changes)
 weights_diff = []
 n_iterations = 10  # Number of iterations for tracking
@@ -27,7 +26,7 @@ previous_weights = np.zeros((10, X_train.shape[1]))  # 10 classes, 784 features
 
 # Loop over different numbers of iterations to track weight changes
 for i in range(1, n_iterations + 1):
-    softmax_reg = LogisticRegression(multi_class="multinomial", solver="saga", max_iter=i, random_state=42)
+    softmax_reg = LogisticRegression(solver="saga", max_iter=i*100, random_state=42)
     softmax_reg.fit(X_train_scaled, y_train)
     
     # Get the current weights
